@@ -92,10 +92,10 @@ function updateGameArea() {
 
     myGameArea.clear();
     myGameArea.frameNo += 1;
-    if (myGameArea.frameNo == 1 || everyinterval(150)) {
+    if (myGameArea.frameNo == 1 || everyinterval(50)) {
         x = Math.round(Math.random() * myGameArea.canvas.width);
         y = 0;
-        myObstacles.push(new component(12, 15, "Potion01.png", x, y, "image"));
+        myObstacles.push(new component(12, 15, "Skull.png", x, y, "image"));
     }
 
     if (myGameArea.frameNo == 1 || everyinterval(50)) {
