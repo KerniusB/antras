@@ -35,18 +35,22 @@ function createAnims(self) {
 
 
 function addCollisions(physics) {
-    physics.add.overlap(player, healthPacks, collectHealth, null, this);
+    physics.add.overlap(player, coins, collectHealth, null, this);
     physics.add.overlap(player, monsters, touchEnemy, null, this);
     physics.add.collider(monsters, monsters)
-    physics.add.collider(playerBullets, monsters, shootEnemy, null, this);
+    // physics.add.collider(playerBullets, monsters, shootEnemy, null, this);
     physics.add.overlap(player, enemyBullets, touchEnemy, null, this);
+    physics.add.overlap(player, coins, touchEnemy, null, this);
+}
+
+function collectCoin(){
+    
 }
 
 function createPlayer(physics) {
-    player = physics.add.sprite(game.config.width / 2, game.config.height / 2, 'tank');
+    player = physics.add.sprite(game.config.width / 2, game.config.height, 'chest').setScale(2);
     player.setCollideWorldBounds(true);
-    playerBarrel = physics.add.sprite(player.x, player.y, "tankShaft");
-    playerBarrel.setOrigin(0.5, 0)
+    
 }
 
 function createGroups(physics) {
@@ -90,7 +94,8 @@ function checkGameOver(self) {
         if (!gameOverText) {
             self.triggerTimer.remove(false);
             self.add.displayList.removeAll();
-            self.add.text(420, game.config.height / 2, 'Your ship has been destroyed!\nScore: ' + score, { font: "bold 32px Arial", fill: "#000", align: 'center' });
+            config.physics.arcade.gravity = { y: 100 }
+            self.add.text(420, game.config.height / 2, 'Your player lost!\nScore: ' + score, { font: "bold 32px Arial", fill: "#000", align: 'center' });
         }
         return gameOver;
     }
@@ -114,60 +119,45 @@ function shootBullets(self, physics) {
 }
 
 function movePlayer(self) {
-    let angle = Phaser.Math.Angle.Between(fullInput.x, fullInput.y, player.x, player.y);
-    playerBarrel.setRotation(angle + Math.PI / 2);
+    
     if (cursors.left.isDown) {
-        player.anims.play('ride', true);
-        player.angle -= 2;
+        player.setVelocityX(-160);
+        console.log("left");
     }
     else if (cursors.right.isDown) {
-        player.anims.play('ride', true);
-        player.angle += 2;
+        player.setVelocityX(160);
+        console.log("right");
+    }
+    else {
+        player.setVelocityX(0);
+        console.log("0");
     }
 
-    if (cursors.up.isDown) {
-        currentPlayerSpeed = 160
-        player.anims.play('ride', true);
-    } else {
-        if (currentPlayerSpeed > 0) {
-            currentPlayerSpeed -= 4;
-            player.anims.play('ride', true);
-        }
-    }
-    if (currentPlayerSpeed > 0) {
-        self.physics.velocityFromRotation(player.rotation - Math.PI / 2, currentPlayerSpeed, player.body.velocity);
-    } else {
-        player.anims.play('stand')
-    }
+    // if (cursors.up.isDown) {
+    //     currentPlayerSpeed = 160
+    //     player.anims.play('ride', true);
+    // } else {
+    //     if (currentPlayerSpeed > 0) {
+    //         currentPlayerSpeed -= 4;
+    //         player.anims.play('ride', true);
+    //     }
+    // }
+    // if (currentPlayerSpeed > 0) {
+    //     self.physics.velocityFromRotation(player.rotation - Math.PI / 2, currentPlayerSpeed, player.body.velocity);
+    // } else {
+    //     player.anims.play('stand')
+    // }
 
-    playerBarrel.x = player.x;
-    playerBarrel.y = player.y;
+    // playerBarrel.x = player.x;
+    // playerBarrel.y = player.y;
 }
 function collectHealth(player, healthPack) {
     healthPack.destroy();
-    lives++;
+    score++;
     livesText.setText('Lives: ' + lives + ' SCORE: ' + score);
 }
 
-function shootEnemy(bullet, enemy) {
-    bullet.destroy();
-    score += 5;
-    livesText.setText('Lives: ' + lives + ' SCORE: ' + score);
-    enemy.health--;
-    if (enemy.health <= 0) {
 
-        enemy.damage = 0;
-        enemy.destroy();
-        let angle = Phaser.Math.Angle.Between(player.x, player.y, enemy.x, enemy.y);
-        playExplosion(enemy.x, enemy.y, angle);
-        score += enemy.deathScore;
-        livesText.setText('Lives: ' + lives + ' SCORE: ' + score);
-        if (Math.random() < 0.10) {
-            dropHeart(enemy.x, enemy.y);
-        }
-
-    }
-}
 
 function dropHeart(x, y) {
     healthPacks.create(x, y, 'health_pack').setScale(2);
@@ -184,7 +174,7 @@ function playExplosion(x, y, angle) {
 
 function touchEnemy(player, enemy) {
     enemy.destroy();
-    lives = lives - enemy.damage;
+    lives = lives - 1;
     livesText.setText('Lives: ' + lives + ' SCORE: ' + score);
     if (lives <= 0) {
         gameOver = true;
@@ -195,7 +185,7 @@ function timerEvent() {
     let x;
     let y;
     
-    x = Math.random() < 0.5 ? -20 : game.config.width + 20;
+    x = Math.random() * game.config.width;
     y = -20;
 
     monsters.create(x, y, "skull").setScale(2);
@@ -206,7 +196,7 @@ function timerEventFreq() {
     let x;
     let y;
     
-    x = Math.random() < 0.5 ? -20 : game.config.width + 20;
+    x = Math.random() * game.config.width;
     y = -20;
 
     coins.create(x, y, "coin").setScale(2);

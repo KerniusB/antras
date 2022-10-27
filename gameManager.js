@@ -18,10 +18,10 @@ var config = {
         create: create,
         update: update
     },
-    backgroundColor: 'red'
+    backgroundColor: '#FFFFFF'
 }
 
-// var cursors;
+var cursors;
 var fullInput;
 // var control = false;
 
@@ -70,12 +70,12 @@ function create() {
     // createAnims(this);
 
 
-    // this.triggerTimer = this.time.addEvent({
-    //     callback: addTracks,
-    //     callbackScope: this,
-    //     delay: 200,
-    //     loop: true
-    // })
+    this.triggerTimer = this.time.addEvent({
+        callback: timerEventFreq,
+        callbackScope: this,
+        delay: 200,
+        loop: true
+    })
     this.triggerTimer = this.time.addEvent({
         callback: timerEvent,
         callbackScope: this,
@@ -87,10 +87,10 @@ function create() {
 
 
 function update() {
-    // if (checkGameOver(this)) {
-    //     return;
-    // }
-    // movePlayer(this);
+    if (checkGameOver(this)) {
+        return;
+    }
+    movePlayer(this);
     // shootBullets(this, this.physics);
     // moveEnemies(this);
 }
