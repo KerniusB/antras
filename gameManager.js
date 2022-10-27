@@ -22,25 +22,17 @@ var config = {
 }
 
 var cursors;
-var fullInput;
-// var control = false;
 
+var skullTimer;
+var coinTimer;
 var player;
-// var playerBarrel;
-// var playerBullets;
-// var playerBarrelEnd;
 var currentPlayerSpeed;
-// var tankTracks;
 
 var score = 0;
 var lives = 3;
-// var healthPacks;
 var livesText;
-
-// var enemyBullets;
-var monsters;
+var skulls;
 var coins;
-// var explosions;
 
 var gameOver = false;
 var gameOverText;
@@ -54,43 +46,29 @@ function preload() {
 }
 
 function create() {
-    // for (var i = 0; i < 11; i++) {
-    //     for (var j = 0; j < 7; j++) {
-    //         this.add.tileSprite(i * 128, j * 128, this.game.width, this.game.height, "background");
-    //     }
-    // }
-    // this.add.tileSprite(0, 0, this.game.width, this.game.height, "background");
-    // this.input.setDefaultCursor('crosshair');
-
     createGroups(this.physics);
     mapInput(this.input)
     initiateScoreAndLivesUi(this.add);
     createPlayer(this.physics);
     addCollisions(this.physics);
-    // createAnims(this);
 
-
-    this.triggerTimer = this.time.addEvent({
+    coinTimer = this.time.addEvent({
         callback: timerEventFreq,
         callbackScope: this,
         delay: 200,
         loop: true
     })
-    this.triggerTimer = this.time.addEvent({
+    skullTimer = this.time.addEvent({
         callback: timerEvent,
         callbackScope: this,
-        delay: 500,
+        delay: 200,
         loop: true
     })
-
 }
-
 
 function update() {
     if (checkGameOver(this)) {
         return;
     }
     movePlayer(this);
-    // shootBullets(this, this.physics);
-    // moveEnemies(this);
 }
