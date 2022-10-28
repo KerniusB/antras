@@ -9,7 +9,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            debug: false,
             gravity: { y: 100 }
         }
     },
@@ -25,11 +25,14 @@ var cursors;
 
 var skullTimer;
 var coinTimer;
+var secondsTimer;
 var player;
 var currentPlayerSpeed;
 
 var score = 0;
 var lives = 3;
+var seconds = 0;
+var secondsText;
 var livesText;
 var skulls;
 var coins;
@@ -48,20 +51,27 @@ function preload() {
 function create() {
     createGroups(this.physics);
     mapInput(this.input)
-    initiateScoreAndLivesUi(this.add);
     createPlayer(this.physics);
     addCollisions(this.physics);
+    initiateScoreAndLivesUi(this.add);
+    initiateTimeUi(this.add);
 
     coinTimer = this.time.addEvent({
         callback: timerEventFreq,
         callbackScope: this,
-        delay: 200,
+        delay: 500,
         loop: true
     })
     skullTimer = this.time.addEvent({
         callback: timerEvent,
         callbackScope: this,
-        delay: 200,
+        delay: 1000,
+        loop: true
+    })
+    secondsTimer = this.time.addEvent({
+        callback: changeTime,
+        callbackScope: this,
+        delay: 1000,
         loop: true
     })
 }

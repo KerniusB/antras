@@ -34,14 +34,19 @@ function initiateScoreAndLivesUi(add) {
     livesText = add.text(16, 16, 'Lives: ' + lives + ' SCORE: ' + score, { fontSize: '32px', fill: '#000' })
 }
 
+function initiateTimeUi(add) {
+    secondsText = add.text(800, 16, 'Time: ' + seconds + 's', { fontSize: '32px', fill: '#000' })
+}
+
 function checkGameOver(self) {
     if (gameOver) {
         if (!gameOverText) {
             gameOverText = true;
             skullTimer.remove(false);
             coinTimer.remove(false);
+            // secondsTimer.remove()
             self.add.displayList.removeAll();
-            self.add.text(420, game.config.height / 2, 'Your player lost!\nScore: ' + score, { font: "bold 32px Arial", fill: "#000", align: 'center' });
+            self.add.text(game.config.height / 2, game.config.height / 2, 'Your player lost!\nScore: ' + score, { font: "bold 32px Arial", fill: "#000", align: 'center' });
         }
         return gameOver;
     }
@@ -50,16 +55,16 @@ function checkGameOver(self) {
 function movePlayer(self) {
 
     if (cursors.left.isDown) {
-        player.setVelocityX(-160);
-        console.log("left");
+        player.setVelocityX(-250);
+        // console.log("left");
     }
     else if (cursors.right.isDown) {
-        player.setVelocityX(160);
-        console.log("right");
+        player.setVelocityX(250);
+        // console.log("right");
     }
     else {
         player.setVelocityX(0);
-        console.log("0");
+        // console.log("0");
     }
 }
 
@@ -90,4 +95,10 @@ function timerEventFreq() {
     y = -20;
 
     coins.create(x, y, "coin").setScale(2);
+}
+
+function changeTime(){
+    seconds = seconds + 1;
+    secondsText.setText('Time : ' + seconds + 's');
+    console.log(seconds)
 }
